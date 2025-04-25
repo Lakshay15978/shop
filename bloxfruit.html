@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blox Fruits Account Shop</title>
+  <style>
+    /* Your existing styles remain unchanged */
+    /* Scroll up to check styles */
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Blox Fruits Account Shop</h1>
+  </header>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search by ID...">
+  </div>
+
+  <div class="container" id="accountContainer"></div>
+
+  <div class="checkout">
+    <h2>Your Cart</h2>
+    <ul id="cart-list">
+      <li>No items added yet.</li>
+    </ul>
+    <p>Total: $<span id="totalAmount">0.00</span></p>
+    <button class="checkout-btn">Proceed to Checkout</button>
+  </div>
+
+  <footer>
+    <!-- Footer content remains the same -->
+  </footer>
+
+  <script>
+    const accounts = [
+      { id: "BF001", price: 19.99, description: "Level 2400, Dragon fruit, 10M Beli, Full Gear", image: "https://via.placeholder.com/300" },
+      { id: "BF002", price: 24.99, description: "Level 2450, Leopard fruit, Max Stats, Godhuman", image: "https://via.placeholder.com/300" },
+      { id: "BF003", price: 15.99, description: "Level 2300, Dough fruit, 7M Beli", image: "https://via.placeholder.com/300" },
+      { id: "BF004", price: 29.99, description: "Level 2500, Kitsune, 12M Beli, Godhuman", image: "https://via.placeholder.com/300" },
+      { id: "BF005", price: 22.50, description: "Level 2400, Phoenix fruit, Full Haki", image: "https://via.placeholder.com/300" },
+      { id: "BF006", price: 9.99,  description: "Level 2000, Ice fruit, Beginner Set", image: "https://via.placeholder.com/300" },
+      { id: "BF007", price: 27.99, description: "Level 2450, Buddha fruit, PvP Ready", image: "https://via.placeholder.com/300" },
+      { id: "BF008", price: 11.50, description: "Level 2150, Light fruit, Fast Farm", image: "https://via.placeholder.com/300" },
+      { id: "BF009", price: 18.00, description: "Level 2200, Magma fruit, Haki Max", image: "https://via.placeholder.com/300" },
+      { id: "BF010", price: 26.75, description: "Level 2450, Venom fruit, Full Gear", image: "https://via.placeholder.com/300" }
+    ];
+
+    const accountContainer = document.getElementById("accountContainer");
+    const cartList = document.getElementById("cart-list");
+    const totalAmountEl = document.getElementById("totalAmount");
+
+    let cart = [];
+
+    function renderAccounts() {
+      accountContainer.innerHTML = "";
+      accounts.forEach(account => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <h2>ID: ${account.id}</h2>
+          <p class="price">$${account.price.toFixed(2)}</p>
+          <div class="description-content">
+            <img src="${account.image}" alt="${account.id}">
+            <p>${account.description}</p>
+          </div>
+          <button class="description-btn" onclick="toggleDescription(this)">Toggle Description</button>
+          <button class="add-to-cart" onclick='addToCart("${account.id}")'>Add to Cart</button>
+        `;
+        accountContainer.appendChild(card);
+      });
+    }
+
+    function toggleDescription(button) {
+      const desc = button.previousElementSibling;
+      desc.style.display = desc.style.display === "block" ? "none" : "block";
+    }
+
+    function addToCart(id) {
+      const account = accounts.find(acc => acc.id === id);
+      if (!cart.find(item => item.id === id)) {
+        cart.push(account);
+        updateCart();
+      }
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      updateCart();
+    }
+
+    function updateCart() {
+      cartList.innerHTML = "";
+      if (cart.length === 0) {
+        cartList.innerHTML = "<li>No items added yet.</li>";
+        totalAmountEl.textContent = "0.00";
+        return;
+      }
+
+      let total = 0;
+      cart.forEach(item => {
+        total += item.price;
+        const li = document.createElement("li");
+        li.innerHTML = `${item.id} - $${item.price.toFixed(2)} <button class="remove-btn" onclick='removeFromCart("${item.id}")'>Remove</button>`;
+        cartList.appendChild(li);
+      });
+
+      totalAmountEl.textContent = total.toFixed(2);
+    }
+
+    renderAccounts();
+  </script>
+</body>
+</html>
